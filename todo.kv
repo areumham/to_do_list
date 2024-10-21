@@ -1,0 +1,65 @@
+<TodoApp>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    TextInput:
+        id: task_input
+        hint_text: "Add a new task"
+        size_hint_y: None
+        height: 40
+        multiline: False
+
+    Button:
+        text: "Add Task"
+        size_hint_y: None
+        height: 40
+        on_press: app.add_task()
+
+    ScrollView:
+        size_hint: (1, None)
+        size: (400, 300)
+
+        GridLayout:
+            id: tasks_layout
+            cols: 1
+            size_hint_y: None
+            height: self.minimum_height
+<CalendarWidget>:
+    cols: 7
+    Button:
+        text: "Prev"
+        on_press: root.change_month(-1)
+    Button:
+        text: "Next"
+        on_press: root.change_month(1)
+    Button:
+        text: root.current_month.strftime("%B %Y")
+        size_hint_x: None
+        width: 200
+    Button:
+        text: "Today"
+        on_press: root.go_to_today()
+        
+    # 달력 날짜 버튼들
+    Button:
+        id: day_buttons
+        on_release: root.update_calendar()
+    
+<DayButton>:
+    on_release: root.show_record_input()
+
+<RecordInputPopup>:
+    title: "일정 입력"
+    size_hint: (0.8, 0.4)
+    auto_dismiss: False
+    BoxLayout:
+        orientation: 'vertical'
+        TextInput:
+            id: record_input
+            hint_text: "일정을 입력하세요"
+        Button:
+            text: "저장"
+            on_press:
+                root.save_record(root.ids.record_input.text)
+                root.dismiss()
